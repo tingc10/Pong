@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Project.Utility;
@@ -10,22 +10,24 @@ namespace Pong.Networking {
         [Header("Network Client")]
         [SerializeField]
         private Transform networkContainer;
-        private Dictionary<string, GameObject> serverObjects;
-
-        private SocketManager Manager;
+        private Dictionary<string, NetworkIdentity> serverObjects;
+        private SocketManager manager;
+        [SerializeField]
+        private GameObject playerPreFab;
+        public static string ClientID { get; private set; }
         
         // Start is called before the first frame update
         public void Start() {
             SocketOptions options = new SocketOptions();
             options.AutoConnect = false;
             options.ConnectWith = BestHTTP.SocketIO.Transports.TransportTypes.WebSocket;
-            Manager = new SocketManager(new System.Uri("http://localhost:52300/socket.io/"));
+            manager = new SocketManager(new System.Uri("http://localhost:52300/socket.io/"));
             initialize();
             setupEvents();
             // The argument will be an Error object.
-            Manager.Socket.On(SocketIOEventTypes.Error, (socket, packet, args) => Debug.LogError(string.Format("Error: {0}", args[0].ToString())));
+            manager.Socket.On(SocketIOEventTypes.Error, (socket, packet, args) => Debug.LogError(string.Format("Error: {0}", args[0].ToString())));
             // We set SocketOptions' AutoConnect to false, so we have to call it manually.
-            Manager.Open();
+            manager.Open();
         }
 
         // Update is called once per frame
@@ -33,14 +35,14 @@ namespace Pong.Networking {
         }
 
         private void initialize() {
-            serverObjects = new Dictionary<string, GameObject>();
+            serverObjects = new Dictionary<string, NetworkIdentity>();
         }
 
         private void setupEvents() {
-            Manager.Socket.On("open", OnOpen);
-            Manager.Socket.On("register", OnRegister);
-            Manager.Socket.On("spawn", OnSpawn);
-            Manager.Socket.On("disconnected", OnDisconnected);
+            manager.Socket.On("open", OnOpen);
+            manager.Socket.On("register", OnRegister);
+            manager.Socket.On("spawn", OnSpawn);
+            manager.Socket.On("disconnected", OnDisconnected);
         }
 
         void OnOpen(Socket socket, Packet packet, params object[] args) {
@@ -49,29 +51,55 @@ namespace Pong.Networking {
 
         void OnRegister(Socket socket, Packet packet, params object[] args){
             var data = args[0] as Dictionary<string, object>;
-            string id = data["id"] as string;
-
-            Debug.LogFormat("Our Client's ID ({0})",id);
+            ClientID = data["id"] as string;
+            Debug.Log(JsonUtility.ToJson(args).ToString());
+            Debug.LogFormat("Our Client's ID ({0})", ClientID);
         }
 
         void OnSpawn(Socket socket, Packet packet, params object[] args) {
             var data = args[0] as Dictionary<string, object>;
             string id = data["id"] as string;
 
-            GameObject go = new GameObject("Server ID: " + id);
-            go.transform.SetParent(networkContainer);
+            // Second param sets the parent of the transform
+            // same as go.transform.SetParent(networkContainer)
+            GameObject go = Instantiate(playerPreFab, networkContainer);
+            go.name = string.Format("Player ({0})", id);
+            NetworkIdentity ni = go.GetComponent<NetworkIdentity>();
+            ni.SetControllerID(id);
+            ni.SetSocketRef(manager);
 
-            serverObjects.Add(id, go);
+            serverObjects.Add(id, ni);
         }
 
         void OnDisconnected(Socket socket, Packet packet, params object[] args) {
             var data = args[0] as Dictionary<string, object>;
-            string id = data["id"].ToString().RemoveQuotes();
-            GameObject go = serverObjects[id];
+            string id = data["id"] as string;
+            GameObject go = serverObjects[id].gameObject;
             // Remove the gameobject
             Destroy(go);
             // Remove from memory
             serverObjects.Remove(id);
         }
+
+        void OnUpdatePosition(Socket socket, Packet packet, params object[] args) {
+            var data = args[0] as Dictionary<string, object>;
+            string id = data["id"] as string;
+            // float position = data["position"]["x"].f;
+            // float x = position.x;
+            // flo
+
+        }
+    }
+    // Make serializable so it can be sent over sockets
+    [Serializable]
+    public class Player {
+        public string id;
+        public Position position;
+    }
+
+    [Serializable]
+    public class Position {
+        public float x;
+        public float y;
     }
 }
