@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Pong;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,11 +19,11 @@ public class GameManager : MonoBehaviour
         bottomLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
         topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 
-        Instantiate(ball);
-        Paddle paddle1 = Instantiate(paddle) as Paddle;
-        Paddle paddle2 = Instantiate(paddle) as Paddle;
+        // Instantiate(ball);
+        // Paddle paddle1 = Instantiate(paddle) as Paddle;
+        // Paddle paddle2 = Instantiate(paddle) as Paddle;
 
-        paddle1.Init(true);
-        paddle2.Init(false);
+        // paddle1.Init(true);
+        // paddle2.Init(false);
     }
 }

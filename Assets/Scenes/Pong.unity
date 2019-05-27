@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkContainer: {fileID: 641408988}
+  paddle: {fileID: 6289625402141847655, guid: 5c5b50086fbfe47a1afc65630f182b36, type: 3}
 --- !u!4 &1111115109
 Transform:
   m_ObjectHideFlags: 0
