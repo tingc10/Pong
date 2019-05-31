@@ -41,11 +41,11 @@ namespace Pong.Networking {
             options.AutoConnect = false;
             options.ConnectWith = BestHTTP.SocketIO.Transports.TransportTypes.WebSocket;
             if (Debug.isDebugBuild) {
-                host = "http://localhost";
+                host = string.Format("http://localhost:{0}/socket.io/", port);
             } else {
                 host = "https://young-gorge-52676.herokuapp.com";
             }
-            manager = new SocketManager(new System.Uri(string.Format("{0}:{1}/socket.io/", host, port)));
+            manager = new SocketManager(new System.Uri(string.Format("{0}/socket.io/", host)));
 
             serverObjects = new Dictionary<string, NetworkIdentity>();
         }
