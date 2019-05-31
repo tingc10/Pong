@@ -21,6 +21,7 @@ namespace Pong.Networking {
         private Dictionary<string, NetworkIdentity> serverObjects;
         private SocketManager manager;
         public static string ClientID { get; private set; }
+        private string host;
         
         // Start is called before the first frame update
         public void Start() {
@@ -39,7 +40,12 @@ namespace Pong.Networking {
             SocketOptions options = new SocketOptions();
             options.AutoConnect = false;
             options.ConnectWith = BestHTTP.SocketIO.Transports.TransportTypes.WebSocket;
-            manager = new SocketManager(new System.Uri(string.Format("http://localhost:{0}/socket.io/", port)));
+            if (Debug.isDebugBuild) {
+                host = "http://localhost";
+            } else {
+                host = "https://young-gorge-52676.herokuapp.com";
+            }
+            manager = new SocketManager(new System.Uri(string.Format("{0}:{1}/socket.io/", host, port)));
 
             serverObjects = new Dictionary<string, NetworkIdentity>();
         }
