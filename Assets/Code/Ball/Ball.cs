@@ -17,9 +17,10 @@ namespace Pong {
         // Start is called before the first frame update
         void Start()
         {
-            direction = (new Vector2(Random.Range(-10, 10), Random.Range(-10, 10))).normalized;
+            float x = Random.Range(-10, 10);
+            direction = (new Vector2(x, x/3)).normalized;
             radius = transform.localScale.x/2;
-            transform.position = new Vector2(GameManager.topRight.x / 2, 0);
+            transform.position = new Vector2(0, 0);
         }
 
         // Update is called once per frame

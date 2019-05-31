@@ -93,7 +93,7 @@ namespace Pong.Networking {
                 serverObjects.Add(id, ni);
             }
             // this is super janky, just brute forcing start game after player enters
-            if (publicId == "player-1") {
+            if (publicId == "player-2") {
                 GameManager.gameStart = true;
             }
         }
