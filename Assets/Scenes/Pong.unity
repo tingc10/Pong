@@ -255,6 +255,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkContainer: {fileID: 641408988}
   paddle: {fileID: 6289625402141847655, guid: 5c5b50086fbfe47a1afc65630f182b36, type: 3}
+  ball: {fileID: 5074258541371634401, guid: 55dfa1520e37049ae94efc49e6626662, type: 3}
+  serverSpawnables: {fileID: 11400000, guid: 92d5318a0526b4c6baba51314ebf21a7, type: 2}
 --- !u!4 &1111115109
 Transform:
   m_ObjectHideFlags: 0

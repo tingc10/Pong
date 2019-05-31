@@ -11,7 +11,7 @@ namespace Pong.Networking {
         private string id;
         [SerializeField]
         private bool isControlling;
-        private SocketManager manager;
+        private Socket socket;
 
         // Start is called before the first frame update
         public void Awake()
@@ -27,8 +27,8 @@ namespace Pong.Networking {
             isControlling = (NetworkClient.ClientID == ID) ? true : false;
         }
 
-        public void SetSocketRef(SocketManager sm) {
-            manager = sm;
+        public void SetSocketRef(Socket s) {
+            socket = s;
         }
 
         public string GetID() {
@@ -39,8 +39,8 @@ namespace Pong.Networking {
             return isControlling;
         }
 
-        public SocketManager GetSocketManager() {
-            return manager;
+        public Socket GetSocket() {
+            return socket;
         }
     }
 }

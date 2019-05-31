@@ -57,7 +57,7 @@ namespace Pong.Networking {
             player.position.x = Mathf.Round(transform.position.x * 1000.0f) / 1000.0f;
             player.position.y = Mathf.Round(transform.position.y * 1000.0f) / 1000.0f;
             // TODO: Wtf. JsonUtility doesn't respect 3 decimal representation...
-            networkIdentity.GetSocketManager().Socket.Emit("updatePosition", JsonUtility.ToJson(player));
+            networkIdentity.GetSocket().Emit("updatePosition", JsonUtility.ToJson(player));
         }
     }
 }

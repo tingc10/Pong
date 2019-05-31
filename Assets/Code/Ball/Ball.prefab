@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8710040576623590074}
   - component: {fileID: 7233114211827171227}
   - component: {fileID: 5074258541371634401}
+  - component: {fileID: 2210816110060019693}
+  - component: {fileID: 2784271667106635362}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -132,3 +134,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  networkIdentity: {fileID: 2210816110060019693}
+--- !u!114 &2210816110060019693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422018485102780797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52cb37cf39d8549aa995dda2b5d9938a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  isControlling: 0
+--- !u!114 &2784271667106635362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422018485102780797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63998d451ea9b4360bd6fbd94849146d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oldPosition: {x: 0, y: 0, z: 0}
