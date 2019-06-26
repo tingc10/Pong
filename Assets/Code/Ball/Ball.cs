@@ -30,12 +30,11 @@ namespace Pong {
             
                 transform.Translate(speed * direction * Time.deltaTime);
 
-                if (transform.position.y < GameManager.bottomLeft.y + radius && direction.y < 0) {
+                if ((transform.position.y < GameManager.bottomLeft.y + radius && direction.y < 0) ||
+                    (transform.position.y > GameManager.topRight.y - radius && direction.y > 0)) {
                     direction.y = -direction.y;
-                }
-
-                if (transform.position.y > GameManager.topRight.y - radius && direction.y > 0) {
-                    direction.y = -direction.y;
+                    // Each time the ball collides with the paddle, the ball will speed up
+                    speed = speed * 1.05f;
                 }
 
                 if (transform.position.x < GameManager.bottomLeft.x + radius && direction.x < 0) {
