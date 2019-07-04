@@ -16,6 +16,7 @@ namespace Pong {
         // Start is called before the first frame update
         void Start()
         {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
             // Convert screen's pixel coordinate into the game's coordinates
             bottomLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
             topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
