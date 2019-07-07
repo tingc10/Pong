@@ -20,6 +20,7 @@ namespace Pong {
             // float x = Random.Range(-10, 10);
             float x = Random.Range(0, 10);
             direction = (new Vector2(x, x/3)).normalized;
+            // transform.SetParent(GameManager.playArea.transform);
             radius = transform.localScale.x/2;
             transform.localPosition = new Vector2(0, 0);
         }

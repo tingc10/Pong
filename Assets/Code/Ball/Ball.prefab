@@ -134,6 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  playArea: {fileID: 3922644386934877584, guid: 156bf8458b7c25b448aabe0b0a5a0836,
+    type: 3}
   networkIdentity: {fileID: 2210816110060019693}
 --- !u!114 &2210816110060019693
 MonoBehaviour:

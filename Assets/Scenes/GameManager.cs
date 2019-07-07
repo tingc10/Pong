@@ -7,14 +7,14 @@ using UnityEngine;
 namespace Pong {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField]
-        public GameObject playArea;
+        public static GameObject playArea;
         public static Vector2 bottomLeft;
         public static Vector2 topRight;
         public static bool gameStart;
         // Start is called before the first frame update
         void Start()
         {
+            playArea = GameObject.Find("Playarea");
             Vector2 playAreaSize = playArea.transform.localScale;
             topRight = playAreaSize / 2;
             bottomLeft = playAreaSize / -2;
