@@ -7,8 +7,7 @@ using UnityEngine;
 namespace Pong {
     public class GameManager : MonoBehaviour
     {
-        public Paddle paddle;
-        public Ball ball;
+        public static GameObject panel;
 
         public static Vector2 bottomLeft;
         public static Vector2 topRight;
@@ -16,10 +15,13 @@ namespace Pong {
         // Start is called before the first frame update
         void Start()
         {
+            panel = GameObject.Find("Panel");
+            Vector2 size = panel.GetComponent<BoxCollider2D>().bounds.size;
+            Debug.Log(size);
             // Convert screen's pixel coordinate into the game's coordinates
-            bottomLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
-            topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-            Camera.main.transform.rotation = Quaternion.Euler(0,0,90);
+            bottomLeft = size/-2;
+            topRight = size/2;
+            // Camera.main.transform.rotation = Quaternion.Euler(0,0,90);
             gameStart = false;
         }
     }
