@@ -19,6 +19,7 @@ namespace Pong {
             // Convert screen's pixel coordinate into the game's coordinates
             bottomLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
             topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+            Camera.main.transform.rotation = Quaternion.Euler(0,0,90);
             gameStart = false;
         }
     }
