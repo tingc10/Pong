@@ -7,18 +7,18 @@ using UnityEngine;
 namespace Pong {
     public class GameManager : MonoBehaviour
     {
-        public Paddle paddle;
-        public Ball ball;
-
+        [SerializeField]
+        public GameObject playArea;
         public static Vector2 bottomLeft;
         public static Vector2 topRight;
         public static bool gameStart;
         // Start is called before the first frame update
         void Start()
         {
-            // Convert screen's pixel coordinate into the game's coordinates
-            bottomLeft = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
-            topRight = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+            Vector2 playAreaSize = playArea.transform.localScale;
+            topRight = playAreaSize / 2;
+            bottomLeft = playAreaSize / -2;
+            
             gameStart = false;
         }
     }
