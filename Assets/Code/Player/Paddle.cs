@@ -36,7 +36,8 @@ namespace Pong {
                 pos += Vector2.right * transform.localScale.x;
                 input = "PaddleLeft";
             }
-            transform.position = pos;
+            Debug.Log(transform.localPosition);
+            // transform.localPosition = pos / 2;
             transform.name = input;
             isRight = isRightPaddle;
         }
@@ -45,17 +46,17 @@ namespace Pong {
         void Update()
         {
             if (networkIdentity.IsControlling()) {
-                float move = Input.GetAxis(input) * speed * Time.deltaTime;
+                // float move = Input.GetAxis(input) * speed * Time.deltaTime;
 
-                if (transform.position.y < GameManager.bottomLeft.y + height/2 && move < 0) {
-                    move = 0;
-                }
+                // if (transform.localPosition.y < GameManager.bottomLeft.y + height/2 && move < 0) {
+                //     move = 0;
+                // }
 
-                if (transform.position.y > GameManager.topRight.y - height/2 && move > 0) {
-                    move = 0;
-                }
+                // if (transform.localPosition.y > GameManager.topRight.y - height/2 && move > 0) {
+                //     move = 0;
+                // }
 
-                transform.Translate(move * Vector2.up);
+                // transform.Translate(move * Vector2.up);
             }
         }
     }
