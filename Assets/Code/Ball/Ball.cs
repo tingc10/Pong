@@ -21,7 +21,7 @@ namespace Pong {
             float x = Random.Range(0, 10);
             direction = (new Vector2(x, x/3)).normalized;
             radius = transform.localScale.x/2;
-            transform.position = new Vector2(0, 0);
+            transform.localPosition = new Vector2(0, 0);
         }
 
         // Update is called once per frame
@@ -31,19 +31,19 @@ namespace Pong {
             
                 transform.Translate(speed * direction * Time.deltaTime);
 
-                if ((transform.position.y < GameManager.bottomLeft.y + radius && direction.y < 0) ||
-                    (transform.position.y > GameManager.topRight.y - radius && direction.y > 0)) {
+                if ((transform.localPosition.y < GameManager.bottomLeft.y + radius && direction.y < 0) ||
+                    (transform.localPosition.y > GameManager.topRight.y - radius && direction.y > 0)) {
                     direction.y = -direction.y;
                     // Each time the ball collides with the paddle, the ball will speed up
                     speed = speed * 1.05f;
                 }
 
-                if (transform.position.x < GameManager.bottomLeft.x + radius && direction.x < 0) {
+                if (transform.localPosition.x < GameManager.bottomLeft.x + radius && direction.x < 0) {
                     Debug.Log("Player 2 wins!");
                     enabled = false;
                 }
 
-                if (transform.position.x > GameManager.topRight.x + radius && direction.x > 0) {
+                if (transform.localPosition.x > GameManager.topRight.x + radius && direction.x > 0) {
                     Debug.Log("Player 1 wins!");
                     enabled = false;
                 }
