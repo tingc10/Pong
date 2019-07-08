@@ -17,6 +17,8 @@ namespace Pong.Networking {
         private Ball ball;
         [SerializeField]
         private ServerObjects serverSpawnables;
+        [SerializeField]
+        public bool useProdServer;
 
         private Dictionary<string, NetworkIdentity> serverObjects;
         private SocketManager manager;
@@ -40,7 +42,7 @@ namespace Pong.Networking {
             SocketOptions options = new SocketOptions();
             options.AutoConnect = false;
             options.ConnectWith = BestHTTP.SocketIO.Transports.TransportTypes.WebSocket;
-            if (Debug.isDebugBuild) {
+            if (!useProdServer && Debug.isDebugBuild) {
                 host = string.Format("http://localhost:{0}/socket.io/", port);
             } else {
                 host = "https://young-gorge-52676.herokuapp.com";

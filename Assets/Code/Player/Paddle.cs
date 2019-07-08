@@ -36,7 +36,7 @@ namespace Pong {
                 pos += Vector2.right * transform.localScale.x;
                 input = "PaddleLeft";
             }
-            // UpdateCamera(isRightPaddle);
+            UpdateCamera(isRightPaddle);
             transform.position = pos;
             transform.name = input;
             isRight = isRightPaddle;
