@@ -17,8 +17,6 @@ namespace Pong {
         {
             panel = GameObject.Find("Panel");
             Vector2 size = panel.GetComponent<BoxCollider2D>().bounds.size;
-            Debug.Log(size);
-            // Convert screen's pixel coordinate into the game's coordinates
             bottomLeft = size/-2;
             topRight = size/2;
             // Camera.main.transform.rotation = Quaternion.Euler(0,0,90);
