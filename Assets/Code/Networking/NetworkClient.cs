@@ -92,18 +92,30 @@ namespace Pong.Networking {
                 // Second param sets the parent of the transform
                 // same as go.transform.SetParent(networkContainer)
                 Paddle go = Instantiate(paddle, networkContainer);
-                go.Init(publicId == "player-1");
+                bool isPlayer1 = publicId == "player-1";
+                go.Init(isPlayer1);
                 go.name = string.Format("Player ({0})", id);
                 NetworkIdentity ni = go.GetComponent<NetworkIdentity>();
                 ni.SetControllerID(id);
                 ni.SetSocketRef(manager.Socket);
-
+                if (ni.IsControlling()) {
+                    UpdateCamera(isPlayer1);
+                }
                 serverObjects.Add(id, ni);
             }
             // this is super janky, just brute forcing start game after player enters
             if (publicId == "player-2") {
                 GameManager.gameStart = true;
             }
+        }
+
+        void UpdateCamera(bool rotateLeft) {
+            if (rotateLeft) {
+                Camera.main.transform.Rotate(0,0,90);
+            } else {
+                Camera.main.transform.Rotate(0,0,-90);
+            }
+            Camera.main.fieldOfView = 11;
         }
 
         void OnDisconnected(Socket socket, Packet packet, params object[] args) {

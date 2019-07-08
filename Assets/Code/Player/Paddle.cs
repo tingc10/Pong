@@ -36,21 +36,10 @@ namespace Pong {
                 pos += Vector2.right * transform.localScale.x;
                 input = "PaddleLeft";
             }
-            if (networkIdentity.IsControlling()) {
-                UpdateCamera(isRightPaddle);
-            }
+
             transform.position = pos;
             transform.name = input;
             isRight = isRightPaddle;
-        }
-
-        void UpdateCamera(bool rotateLeft) {
-            if (rotateLeft) {
-                Camera.main.transform.Rotate(0,0,90);
-            } else {
-                Camera.main.transform.Rotate(0,0,-90);
-            }
-            Camera.main.fieldOfView = 11;
         }
 
         // Update is called once per frame
