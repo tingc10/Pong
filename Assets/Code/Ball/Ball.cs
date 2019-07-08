@@ -34,7 +34,6 @@ namespace Pong {
                     (transform.position.y > GameManager.topRight.y - radius && direction.y > 0)) {
                     direction.y = -direction.y;
                     // Each time the ball collides with the paddle, the ball will speed up
-                    speed = speed * 1.05f;
                 }
 
                 if (transform.position.x < GameManager.bottomLeft.x + radius && direction.x < 0) {
@@ -54,6 +53,7 @@ namespace Pong {
                 Debug.Log("collide");
                 // bool isRight = other.GetComponent<Paddle>().isRight;
                 direction.x = -direction.x;
+                speed = speed * 1.05f;
             }
         }
     }
