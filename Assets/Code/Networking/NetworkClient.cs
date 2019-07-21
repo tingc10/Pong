@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Project.Utility;
+using UnityEngine.UI;
 using BestHTTP.SocketIO;
 using Project.Scriptable;
 
@@ -59,6 +59,8 @@ namespace Pong.Networking {
             manager.Socket.On("spawn", OnSpawn);
             manager.Socket.On("disconnected", OnDisconnected);
             manager.Socket.On("updatePosition", OnUpdatePosition);
+            manager.Socket.On("registerController", OnRegisterController);
+            manager.Socket.On("controllerInput", OnControllerInput);
             // Server triggered new objects
             // manager.Socket.On("serverSpawn", OnServerSpawn);
             // manager.Socket.On("serverUnspawn", OnServerUnspawn);
@@ -73,6 +75,18 @@ namespace Pong.Networking {
             ClientID = data["id"] as string;
 
             Debug.LogFormat("Our Client's ID ({0})", ClientID);
+            GameObject playerIdDisplay = GameObject.Find("PlayerId");
+            Text text = playerIdDisplay.GetComponent<Text>();
+            text.text = ClientID;
+        }
+
+        void OnRegisterController(Socket socket, Packet packet, params object[] args){
+            var data = args[0] as Dictionary<string, object>;
+            string id = data["id"] as string;
+            string clientId = data["clientId"] as string;
+            GameObject go = serverObjects[id].gameObject;
+            NetworkInput ni = go.GetComponent<NetworkInput>();
+            ni.SetID(id);
         }
 
         void OnSpawn(Socket socket, Packet packet, params object[] args) {
@@ -100,6 +114,7 @@ namespace Pong.Networking {
                 ni.SetSocketRef(manager.Socket);
                 if (ni.IsControlling()) {
                     UpdateCamera(isPlayer1);
+                    RotateText(isPlayer1);
                 }
                 serverObjects.Add(id, ni);
             }
@@ -116,6 +131,16 @@ namespace Pong.Networking {
                 Camera.main.transform.Rotate(0,0,-90);
             }
             Camera.main.fieldOfView = 11;
+        }
+
+        void RotateText(bool rotateLeft) {
+            GameObject playerIdDisplay = GameObject.Find("PlayerId");
+            RectTransform textTransform = playerIdDisplay.GetComponent<RectTransform>();
+            if (rotateLeft) {
+                textTransform.Rotate(0,0,90);
+            } else {
+                textTransform.Rotate(0,0,-90);
+            }
         }
 
         void OnDisconnected(Socket socket, Packet packet, params object[] args) {
@@ -141,45 +166,14 @@ namespace Pong.Networking {
             ni.transform.position = new Vector3(x, y, 0);
         }
 
-        // void OnServerSpawn(Socket socket, Packet packet, params object[] args) {
-        //     var data = args[0] as Dictionary<string, object>;
-        //     string id = data["id"] as string;
-        //     string name = data["name"] as string;
-        //     var position = data["position"] as Dictionary<string, float>;
-        //     float x = position["x"];
-        //     float y = position["y"];
-        //     Debug.LogFormat("Server wants us to spawn a '{0}'", name);
-
-        //     if (!serverObjects.ContainsKey(id)) {
-        //         ServerObjectData sod = serverSpawnables.GetObjectByName(name);
-        //         var spawnedObject = Instantiate(sod.Prefab, networkContainer);
-        //         spawnedObject.transform.position = new Vector3(x, y, 0);
-        //         NetworkIdentity ni = spawnedObject.GetComponent<NetworkIdentity>();
-        //         ni.SetControllerID(id);
-        //         ni.SetSocketRef(manager.Socket);
-
-        //         if (name == "Ball") {
-        //             const float ROTATION_OFFSET = 90;
-        //             var direction = data["direction"] as Dictionary<string, float>;
-        //             float directionX = direction["x"];
-        //             float directionY = direction["y"];
-
-        //             float rot = Mathf.Atan2(directionY, directionX) * Mathf.Rad2Deg;
-        //             Vector3 currentRotation = new Vector3(0, 0, rot - ROTATION_OFFSET);
-        //             spawnedObject.transform.rotation = Quaternion.Euler(currentRotation);
-        //         }
-
-        //         serverObjects.Add(id, ni);
-        //     }
-        // }
-
-        // void OnServerUnspawn(Socket socket, Packet packet, params object[] args) {
-        //     var data = args[0] as Dictionary<string, object>;
-        //     string id = data["id"] as string;
-        //     NetworkIdentity ni = serverObjects[id];
-        //     serverObjects.Remove(id);
-        //     DestroyImmediate(ni.gameObject);
-        // }
+        void OnControllerInput(Socket socket, Packet packet, params object[] args) {
+            var data = args[0] as Dictionary<string, object>;
+            string id = data["id"] as string;
+            float xInput = Convert.ToSingle(data["xInput"]);
+            GameObject go = serverObjects[id].gameObject;
+            NetworkInput ni = go.GetComponent<NetworkInput>();
+            ni.SetInput(xInput);
+        }
     }
     // Make serializable so it can be sent over sockets
     [Serializable]

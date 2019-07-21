@@ -17,6 +17,7 @@ namespace Pong {
         [Header("Class References")]
         [SerializeField]
         private NetworkIdentity networkIdentity;
+        private NetworkInput networkInput;
         
         // Start is called before the first frame update
         void Start()
@@ -46,7 +47,8 @@ namespace Pong {
         void Update()
         {
             if (networkIdentity.IsControlling()) {
-                float move = Input.GetAxis(input) * speed * Time.deltaTime;
+                // float move = Input.GetAxis(input) * speed * Time.deltaTime;
+                float move = networkInput.horizontalInput * speed * Time.deltaTime;
 
                 if (transform.position.y < GameManager.bottomLeft.y + height/2 && move < 0) {
                     move = 0;
