@@ -61,6 +61,7 @@ namespace Pong.Networking {
             manager.Socket.On("updatePosition", OnUpdatePosition);
             manager.Socket.On("registerController", OnRegisterController);
             manager.Socket.On("controllerInput", OnControllerInput);
+            manager.Socket.On("startGame", OnStartGame);
             // Server triggered new objects
             // manager.Socket.On("serverSpawn", OnServerSpawn);
             // manager.Socket.On("serverUnspawn", OnServerUnspawn);
@@ -118,10 +119,6 @@ namespace Pong.Networking {
                 }
                 serverObjects.Add(id, ni);
             }
-            // this is super janky, just brute forcing start game after player enters
-            if (publicId == "player-2") {
-                GameManager.gameStart = true;
-            }
         }
 
         void UpdateCamera(bool rotateLeft) {
@@ -173,6 +170,11 @@ namespace Pong.Networking {
             GameObject go = serverObjects[id].gameObject;
             NetworkInput ni = go.GetComponent<NetworkInput>();
             ni.SetInput(xInput);
+        }
+
+        void OnStartGame(Socket socket, Packet packet, params object[] args) {
+            Debug.Log("start game");
+            GameManager.gameStart = true;
         }
     }
     // Make serializable so it can be sent over sockets
