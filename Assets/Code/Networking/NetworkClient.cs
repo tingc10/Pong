@@ -84,7 +84,7 @@ namespace Pong.Networking {
             var data = args[0] as Dictionary<string, object>;
             string id = data["id"] as string;
             string clientId = data["clientId"] as string;
-            GameObject go = serverObjects[id].gameObject;
+            GameObject go = serverObjects[clientId].gameObject;
             NetworkInput ni = go.GetComponent<NetworkInput>();
             ni.SetID(id);
         }

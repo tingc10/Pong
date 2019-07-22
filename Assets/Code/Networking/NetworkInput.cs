@@ -16,9 +16,9 @@ namespace Pong.Networking {
         {
             networkIdentity = GetComponent<NetworkIdentity>();
 
-            if (!networkIdentity.IsControlling()) {
-                enabled = false;
-            }
+            // if (!networkIdentity.IsControlling()) {
+            //     enabled = false;
+            // }
         }
 
         // Update is called once per frame
@@ -51,6 +51,10 @@ namespace Pong.Networking {
 
         void ResetInputs() {
             horizontalInput = 0;
+        }
+
+        public bool HasAssociatedController() {
+            return id != null;
         }
     }
 }
