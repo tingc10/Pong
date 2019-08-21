@@ -17,10 +17,8 @@ namespace Pong {
         // Start is called before the first frame update
         void Start()
         {
-            float x = Random.Range(-10, 10);
-            direction = (new Vector2(x, x/3)).normalized;
             radius = transform.localScale.x/2;
-            transform.position = new Vector2(0, 0);
+            ResetPositionAndDirection();
         }
 
         // Update is called once per frame
@@ -38,12 +36,12 @@ namespace Pong {
 
                 if (transform.position.x < GameManager.bottomLeft.x + radius && direction.x < 0) {
                     Debug.Log("Player 2 wins!");
-                    enabled = false;
+                    EndGame();
                 }
 
                 if (transform.position.x > GameManager.topRight.x + radius && direction.x > 0) {
                     Debug.Log("Player 1 wins!");
-                    enabled = false;
+                    EndGame();
                 }
             }
         }
@@ -54,6 +52,24 @@ namespace Pong {
                 // bool isRight = other.GetComponent<Paddle>().isRight;
                 direction.x = -direction.x;
                 speed = speed * 1.05f;
+            }
+        }
+
+        void EndGame() {
+            enabled = false;
+            networkIdentity.GetSocket().Emit("gameOver");
+        }
+
+        void ResetPositionAndDirection() {
+            float x = Random.Range(-10, 10);
+            direction = (new Vector2(x, x/3)).normalized;
+            transform.position = new Vector2(0, 0);
+        }
+
+        public void ResetGame() {
+            if (networkIdentity.IsControlling()) {
+                ResetPositionAndDirection();
+                enabled = true;
             }
         }
     }

@@ -62,6 +62,7 @@ namespace Pong.Networking {
             manager.Socket.On("registerController", OnRegisterController);
             manager.Socket.On("controllerInput", OnControllerInput);
             manager.Socket.On("startGame", OnStartGame);
+            manager.Socket.On("restartGame", OnRestartGame);            
             // Server triggered new objects
             // manager.Socket.On("serverSpawn", OnServerSpawn);
             // manager.Socket.On("serverUnspawn", OnServerUnspawn);
@@ -119,6 +120,11 @@ namespace Pong.Networking {
                 }
                 serverObjects.Add(id, ni);
             }
+        }
+
+        void OnRestartGame(Socket socket, Packet packet, params object[] args) {
+            ball.ResetGame();
+            GameManager.gameStart = true;
         }
 
         void UpdateCamera(bool rotateLeft) {
