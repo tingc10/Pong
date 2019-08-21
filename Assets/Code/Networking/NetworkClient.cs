@@ -24,6 +24,8 @@ namespace Pong.Networking {
         private SocketManager manager;
         public static string ClientID { get; private set; }
         private string host;
+
+        private Ball ballHost;
         
         // Start is called before the first frame update
         public void Start() {
@@ -97,9 +99,9 @@ namespace Pong.Networking {
             string publicId = data["publicId"] as string;
 
             if (publicId == "host") {
-                Ball go = Instantiate(ball, networkContainer);
-                go.name = "Host";
-                NetworkIdentity ni = go.GetComponent<NetworkIdentity>();
+                ballHost = Instantiate(ball, networkContainer);
+                ballHost.name = "Host";
+                NetworkIdentity ni = ballHost.GetComponent<NetworkIdentity>();
                 ni.SetControllerID(id);
                 ni.SetSocketRef(manager.Socket);
 
@@ -123,7 +125,7 @@ namespace Pong.Networking {
         }
 
         void OnRestartGame(Socket socket, Packet packet, params object[] args) {
-            ball.ResetGame();
+            ballHost.ResetGame();
             GameManager.gameStart = true;
         }
 
