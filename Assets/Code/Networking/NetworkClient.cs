@@ -19,6 +19,13 @@ namespace Pong.Networking {
         private ServerObjects serverSpawnables;
         [SerializeField]
         public bool useProdServer;
+        
+        [SerializeField]
+        private GameObject localCameras;
+
+        [SerializeField]
+        private GameObject mainCamera;
+        
 
         private Dictionary<string, NetworkIdentity> serverObjects;
         private SocketManager manager;
@@ -31,7 +38,6 @@ namespace Pong.Networking {
         public void Start() {
             initialize();
             setupEvents();
-
             // The argument will be an Error object.
             manager.Socket.On(SocketIOEventTypes.Error, (socket, packet, args) => Debug.LogError(string.Format("Error: {0}", args[0].ToString())));
             // We set SocketOptions' AutoConnect to false, so we have to call it manually.
@@ -79,30 +85,31 @@ namespace Pong.Networking {
             ClientID = data["id"] as string;
 
             Debug.LogFormat("Our Client's ID ({0})", ClientID);
-            GameObject playerIdDisplay = GameObject.Find("PlayerId");
-            Text text = playerIdDisplay.GetComponent<Text>();
+            GameObject clientIdDisplay = GameObject.Find("ClientId");
+            Text text = clientIdDisplay.GetComponent<Text>();
             text.text = ClientID;
         }
 
         void OnRegisterController(Socket socket, Packet packet, params object[] args){
             var data = args[0] as Dictionary<string, object>;
-            string id = data["id"] as string;
-            string clientId = data["clientId"] as string;
-            GameObject go = serverObjects[clientId].gameObject;
+            string controllerId = data["id"] as string;
+            string playerId = data["playerId"] as string;
+            GameObject go = serverObjects[playerId].gameObject;
             NetworkInput ni = go.GetComponent<NetworkInput>();
-            ni.SetID(id);
+            ni.SetID(controllerId);
         }
 
         void OnSpawn(Socket socket, Packet packet, params object[] args) {
             var data = args[0] as Dictionary<string, object>;
             string id = data["id"] as string;
+            string clientId = data["clientId"] as string;
             string publicId = data["publicId"] as string;
 
             if (publicId == "host") {
                 ballHost = Instantiate(ball, networkContainer);
                 ballHost.name = "Host";
                 NetworkIdentity ni = ballHost.GetComponent<NetworkIdentity>();
-                ni.SetControllerID(id);
+                ni.SetControllerID(clientId);
                 ni.SetSocketRef(manager.Socket);
 
                 serverObjects.Add(id, ni);
@@ -112,11 +119,12 @@ namespace Pong.Networking {
                 Paddle go = Instantiate(paddle, networkContainer);
                 bool isPlayer1 = publicId == "player-1";
                 go.Init(isPlayer1);
-                go.name = string.Format("Player ({0})", id);
+                go.name = string.Format("Player ({0})", publicId);
                 NetworkIdentity ni = go.GetComponent<NetworkIdentity>();
-                ni.SetControllerID(id);
+                ni.SetControllerID(clientId);
                 ni.SetSocketRef(manager.Socket);
                 if (ni.IsControlling()) {
+                    Debug.Log(isPlayer1);
                     UpdateCamera(isPlayer1);
                     RotateText(isPlayer1);
                 }
@@ -139,8 +147,8 @@ namespace Pong.Networking {
         }
 
         void RotateText(bool rotateLeft) {
-            GameObject playerIdDisplay = GameObject.Find("PlayerId");
-            RectTransform textTransform = playerIdDisplay.GetComponent<RectTransform>();
+            GameObject clientIdDisplay = GameObject.Find("ClientId");
+            RectTransform textTransform = clientIdDisplay.GetComponent<RectTransform>();
             if (rotateLeft) {
                 textTransform.Rotate(0,0,90);
             } else {
@@ -173,16 +181,23 @@ namespace Pong.Networking {
 
         void OnControllerInput(Socket socket, Packet packet, params object[] args) {
             var data = args[0] as Dictionary<string, object>;
-            string id = data["id"] as string;
+            string playerId = data["id"] as string;
             float xInput = Convert.ToSingle(data["xInput"]);
-            GameObject go = serverObjects[id].gameObject;
+            GameObject go = serverObjects[playerId].gameObject;
             NetworkInput ni = go.GetComponent<NetworkInput>();
             ni.SetInput(xInput);
         }
 
         void OnStartGame(Socket socket, Packet packet, params object[] args) {
+            // var data = JsonUtility.ToJson(args[0]);
+            var data = args[0] as Dictionary<string, object>;
+            string isLocalGame = data["local"] as string;
             Debug.Log("start game");
             GameManager.gameStart = true;
+            if (isLocalGame == "true") {
+                localCameras.SetActive(true);
+                mainCamera.SetActive(false);
+            }
         }
     }
     // Make serializable so it can be sent over sockets

@@ -25,7 +25,7 @@ namespace Pong {
         void Update()
         {
             if (networkIdentity.IsControlling() && GameManager.gameStart) {
-            
+                Debug.Log(string.Format("speed: {0}, direction {1}, deltaTime: {2}",speed, direction, Time.deltaTime));
                 transform.Translate(speed * direction * Time.deltaTime);
 
                 if ((transform.position.y < GameManager.bottomLeft.y + radius && direction.y < 0) ||
@@ -61,7 +61,11 @@ namespace Pong {
         }
 
         void ResetPositionAndDirection() {
-            float x = Random.Range(-10, 10);
+            float x = 0;
+            while (x == 0) {
+                x = Random.Range(-10, 10);
+            }
+            Debug.Log(string.Format("Direction seed is: {0}", x));
             direction = (new Vector2(x, x/3)).normalized;
             transform.position = new Vector2(0, 0);
         }
