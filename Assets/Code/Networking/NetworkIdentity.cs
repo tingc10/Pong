@@ -12,6 +12,7 @@ namespace Pong.Networking {
         [SerializeField]
         private bool isControlling;
         private Socket socket;
+        public string publicId;
 
         // Start is called before the first frame update
         public void Awake()

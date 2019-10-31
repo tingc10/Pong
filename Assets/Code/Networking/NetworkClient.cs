@@ -109,6 +109,7 @@ namespace Pong.Networking {
                 ballHost = Instantiate(ball, networkContainer);
                 ballHost.name = "Host";
                 NetworkIdentity ni = ballHost.GetComponent<NetworkIdentity>();
+                ni.publicId = id;
                 ni.SetControllerID(clientId);
                 ni.SetSocketRef(manager.Socket);
 
@@ -121,6 +122,7 @@ namespace Pong.Networking {
                 go.Init(isPlayer1);
                 go.name = string.Format("Player ({0})", publicId);
                 NetworkIdentity ni = go.GetComponent<NetworkIdentity>();
+                ni.publicId = id;
                 ni.SetControllerID(clientId);
                 ni.SetSocketRef(manager.Socket);
                 if (ni.IsControlling()) {

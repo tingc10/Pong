@@ -23,6 +23,7 @@ namespace Pong.Networking {
             ball.position = new Position();
             ball.position.x = 0;
             ball.position.y = 0;
+            ball.id = networkIdentity.publicId;
 
             if (!networkIdentity.IsControlling()) {
                 enabled = false;
