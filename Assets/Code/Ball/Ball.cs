@@ -8,6 +8,7 @@ namespace Pong {
     {
         [SerializeField]
         float speed;
+        private float initialSpeed = 6;
         float radius;
         Vector2 direction;
         
@@ -73,6 +74,7 @@ namespace Pong {
         public void ResetGame() {
             if (networkIdentity.IsControlling()) {
                 ResetPositionAndDirection();
+                speed = initialSpeed;
                 enabled = true;
             }
         }
