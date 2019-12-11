@@ -52,7 +52,7 @@ namespace Pong {
                 Debug.Log("collide");
                 // bool isRight = other.GetComponent<Paddle>().isRight;
                 direction.x = -direction.x;
-                speed = speed * 1.05f;
+                speed = speed * 1.1f;
             }
         }
 
